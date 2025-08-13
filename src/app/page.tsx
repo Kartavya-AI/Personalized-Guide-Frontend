@@ -9,7 +9,7 @@ import VantaFog from "@/components/VantaFog";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import Link from "next/link";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import gtmIllustration from "../../public/images/2df63f_cf537ca0b8254df79a53dae712b84510~mv2.avif";
+import travelIllustration from "../../public/images/ivana-cajina-TUXUCVXmjQk-unsplash.jpg";
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { MagicCard } from "@/components/magicui/magic-card";
 import profile from '../../public/images/profile.jpg'
@@ -23,36 +23,37 @@ import { Marquee } from "@/components/magicui/marquee";
 
 const reviews = [
     {
-        name: "Arjun Malhotra",
-        username: "@arjun_founder",
-        body: "Entrepreneur Copilot helped me validate my startup idea and build a go-to-market plan in under an hour. Absolute game-changer for solo founders!"
+        name: "Rahul Sharma",
+        username: "@rahul_explorer",
+        body: "The Personal Guide Agent helped me plan a 7-day Japan trip in minutes — complete with hidden spots only locals know about."
     },
     {
-        name: "Neha Gupta",
-        username: "@neha_g",
-        body: "The AI-driven customer segmentation was spot-on. We discovered niche audiences we had completely overlooked."
+        name: "Aisha Khan",
+        username: "@aisha_travels",
+        body: "It created a day-by-day itinerary based on my food preferences and budget. I’ve never had such a tailored travel plan!"
     },
     {
-        name: "Vikram Rao",
-        username: "@vikram_startup",
-        body: "Instead of spending weeks on market research, I had actionable insights and channel strategies ready in a single session."
+        name: "Manav Verma",
+        username: "@manav_nomad",
+        body: "Instead of juggling multiple websites, I had my sightseeing, dining, and transportation details all in one place."
     },
     {
-        name: "Sofia Khan",
-        username: "@sofia_k",
-        body: "We pivoted our product positioning based on the competitive analysis from Entrepreneur Copilot — and saw our conversions double."
+        name: "Sana Iqbal",
+        username: "@sana_wanderlust",
+        body: "The cultural tips and language suggestions made me feel prepared and confident before stepping foot in a new country."
     },
     {
-        name: "Karan Patel",
-        username: "@karanp_growth",
-        body: "The outreach and content suggestions saved our team days of brainstorming. It felt like having a full-time GTM strategist in-house."
+        name: "David Lee",
+        username: "@david_globetrotter",
+        body: "Even last-minute plan changes were handled smoothly — it reworked my schedule in seconds."
     },
     {
-        name: "Emily Chen",
-        username: "@emily_builds",
-        body: "As a first-time founder, I had no idea where to start. Copilot walked me through every step and gave me the confidence to launch."
+        name: "Priya Mehta",
+        username: "@priya_adventurer",
+        body: "I usually spend days researching, but this felt like having a local friend guiding me every step of the way."
     }
 ];
+
 
 
 const firstRow = reviews.slice(0, reviews.length / 2);
@@ -101,36 +102,37 @@ const ReviewCard = ({
 
 const steps = [
     {
-        title: "Step 1: Describe Your Startup Idea",
+        title: "Step 1: Share Your Travel Preferences",
         description:
-            "Begin by sharing your business concept, target market, and current stage. The Copilot uses this to tailor a GTM strategy specifically for you."
+            "Tell the AI about your destination, travel dates, budget, interests, and travel style so it can tailor a personalized itinerary."
     },
     {
-        title: "Step 2: Analyze Market & Competition",
+        title: "Step 2: Discover Best Places to Visit",
         description:
-            "The AI scans real-time market data, trends, and competitors to reveal gaps, opportunities, and positioning angles."
+            "The AI curates must-see attractions, hidden gems, and unique experiences based on your preferences."
     },
     {
-        title: "Step 3: Define Ideal Customer Profiles",
+        title: "Step 3: Plan Daily Itinerary",
         description:
-            "Get precise audience segments based on demographics, behavior, and buying patterns — so your targeting is laser-focused."
+            "Get a detailed, day-by-day travel plan optimized for time, distance, and your chosen activities."
     },
     {
-        title: "Step 4: Identify Core Value Proposition",
+        title: "Step 4: Find Best Stays & Dining",
         description:
-            "Clarify your unique selling points and messaging that will resonate most with your chosen audience."
+            "Receive handpicked recommendations for hotels, homestays, and restaurants matching your taste and budget."
     },
     {
-        title: "Step 5: Build Your Acquisition Plan",
+        title: "Step 5: Get Travel Tips & Safety Info",
         description:
-            "Receive actionable recommendations for channels, partnerships, and campaigns to drive awareness and conversions."
+            "Access real-time weather updates, safety advisories, and local cultural tips to make your trip smoother."
     },
     {
-        title: "Step 6: Launch & Track Progress",
+        title: "Step 6: Navigate & Adjust On the Go",
         description:
-            "Execute your GTM strategy with built-in progress tracking, automated feedback, and continuous optimization suggestions."
+            "Use live maps, transport suggestions, and instant re-planning if your schedule changes during travel."
     }
 ];
+
 
 
 export default function Home() {
@@ -138,7 +140,7 @@ export default function Home() {
     return (
         <main className="mx-auto">
             <VantaFog />
-           <section className="mt-20 px-4 md:px-36 flex flex-col justify-center items-center text-center">
+        <section className="mt-20 px-4 md:px-36 flex flex-col justify-center items-center text-center">
     <div className="group mb-5 relative mx-auto flex items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f]">
         <span
             className={cn(
@@ -153,33 +155,37 @@ export default function Home() {
                 WebkitClipPath: "padding-box",
             }}
         />
-        🚀
+        🤖
         <hr className="mx-2 h-4 w-px shrink-0 bg-neutral-500" />
         <AnimatedGradientText className="text-sm font-medium">
-            AI-Powered GTM Strategy Builder for Startup Founders
+            Your AI-Powered Personalized Guide & Decision Assistant
         </AnimatedGradientText>
         <ChevronRight className="ml-1 size-4 stroke-neutral-500 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
     </div>
 
     <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight text-primary mb-6">
-        Launch Your Startup <AuroraText>Faster & Smarter</AuroraText>  
-        with AI-Driven Go-To-Market Strategies
+        Navigate Life & Work <AuroraText>Smarter</AuroraText>{" "}
+with a Personalized AI Guide
+
     </h1>
 
     <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-8">
-        Instantly generate, refine, and execute a robust GTM plan tailored to your business idea — from market analysis and ideal customer profiles to acquisition channels and growth initiatives.
+        Get real-time, tailored advice and step-by-step guidance for your unique goals — 
+        whether it&apos;s career growth, learning a skill, planning a trip, or making big decisions. 
+        Your AI agent learns from your preferences to deliver actionable, accurate, and relevant recommendations.
     </p>
 
-    <div className="">
+    <div>
         <Link href="/search">
             <ShimmerButton className="shadow-2xl">
                 <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
-                    Build My GTM Plan
+                    Start My Personalized Journey
                 </span>
             </ShimmerButton>
         </Link>
     </div>
 </section>
+
 
 
             <section className="pt-20 lg:pt-32 pb-10 px-4 md:px-36 mx-auto">
@@ -212,36 +218,37 @@ export default function Home() {
                 </div>
             </section>
 
-          <section className="flex mt-10 flex-col md:flex-row items-center justify-between px-4 md:px-36 py-12">
-    {/* Text Section */}
-    <div className="md:w-1/2 text-center md:text-left space-y-4 order-2 md:order-1">
-        <h2 className="text-3xl md:text-5xl font-bold text-primary">
-            Build and Launch Your Go-To-Market Strategy — Powered by AI.
-        </h2>
-        <p className="text-lg text-muted-foreground">
-            Entrepreneur Copilot helps you analyze your market, define your ideal customer, and create a step-by-step GTM plan — so you can launch faster, smarter, and with higher ROI.
-        </p>
-        <Link href="/search">
-            <ShimmerButton className="shadow-2xl">
-                <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
-                    Build My GTM Plan
-                </span>
-            </ShimmerButton>
-        </Link>
-    </div>
+         <section className="flex mt-10 flex-col md:flex-row items-center justify-between px-4 md:px-36 py-12">
+  {/* Text Section */}
+  <div className="md:w-1/2 text-center md:text-left space-y-4 order-2 md:order-1">
+    <h2 className="text-3xl md:text-5xl font-bold text-primary">
+      Plan Your Perfect Trip — Powered by AI.
+    </h2>
+    <p className="text-lg text-muted-foreground">
+      Travel Guide Agent helps you discover top destinations, create personalized itineraries, and get real-time tips — so you can travel smarter, save time, and make unforgettable memories.
+    </p>
+    <Link href="/search">
+      <ShimmerButton className="shadow-2xl">
+        <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
+          Plan My Trip
+        </span>
+      </ShimmerButton>
+    </Link>
+  </div>
 
-    {/* Image Section */}
-    <div className="md:w-1/2 mt-10 md:mt-0 order-1 md:order-2 flex justify-center">
-        <Image
-            src={gtmIllustration} // Replace with your GTM strategy illustration path
-            alt="AI-Powered Go-To-Market Strategy"
-            className="w-full max-w-md h-96 object-cover"
-            width={10}
-            height={10}
-            unoptimized
-        />
-    </div>
+  {/* Image Section */}
+  <div className="md:w-1/2 mt-10 md:mt-0 order-1 md:order-2 flex justify-center">
+    <Image
+      src={travelIllustration} // Replace with your travel illustration
+      alt="AI-Powered Travel Planning"
+      className="w-full max-w-md h-96 object-contain"
+      width={10}
+      height={10}
+      unoptimized
+    />
+  </div>
 </section>
+
 
 
             <section className="mx-4 mt-20 md:mx-36">
@@ -259,115 +266,116 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="px-4 md:px-36 mt-20">
-    <Accordion
-        type="single"
-        collapsible
-        className="w-full"
-        defaultValue="item-1"
-    >
-        <h1 className="text-4xl font-bold">FAQ&apos;S</h1>
+           <section className="px-4 md:px-36 mt-20">
+  <Accordion
+    type="single"
+    collapsible
+    className="w-full"
+    defaultValue="item-1"
+  >
+    <h1 className="text-4xl font-bold">FAQ&apos;S</h1>
 
-        <AccordionItem value="item-1">
-            <AccordionTrigger>
-                1. What is Entrepreneur Copilot?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Entrepreneur Copilot is an AI-powered platform that helps startup founders instantly create, refine, and execute robust go-to-market (GTM) strategies. It analyzes your idea, market, and target audience to deliver a personalized plan for launching and scaling successfully.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-1">
+      <AccordionTrigger>
+        1. What is Travel Guide Agent?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Travel Guide Agent is an AI-powered platform that creates personalized travel itineraries, recommends top attractions, and offers real-time tips for any city you want to explore.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-2">
-            <AccordionTrigger>
-                2. How does it work?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Simply describe your startup idea and industry. The platform uses AI and real-time market data to recommend customer profiles, competitive positioning, acquisition strategies, and an actionable GTM roadmap tailored to your business.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-2">
+      <AccordionTrigger>
+        2. How does it work?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Just enter your destination city, and Travel Guide Agent will instantly generate a customized guide with must-visit places, dining recommendations, hidden gems, and travel tips — all based on your preferences.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-3">
-            <AccordionTrigger>
-                3. What kind of businesses can use it?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Entrepreneur Copilot works for solo founders, early-stage startups, accelerators, incubators, and even established businesses entering new markets or pivoting their GTM approach.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-3">
+      <AccordionTrigger>
+        3. Can I chat with the AI for recommendations?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Yes! You can chat with your AI travel assistant to get instant answers, alternative suggestions, and insider tips while planning or even during your trip.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-4">
-            <AccordionTrigger>
-                4. Does it use real market data?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Yes. The platform integrates real-time market insights, industry trends, and competitive data to ensure your GTM strategy reflects the most up-to-date opportunities and challenges.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-4">
+      <AccordionTrigger>
+        4. Does it work offline?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          While the AI guide requires internet to generate your trip plan, you can save the itinerary and access it offline during your travels.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-5">
-            <AccordionTrigger>
-                5. Can it help with customer targeting?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Absolutely. Entrepreneur Copilot recommends detailed ideal customer profiles (ICPs) and segments based on demographics, behavior, and purchase patterns, so your outreach is focused and effective.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-5">
+      <AccordionTrigger>
+        5. Can I save my favorite spots?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Absolutely. You can save places to your favorites list and revisit them later, making it easy to plan multiple trips or keep track of must-see spots.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-6">
-            <AccordionTrigger>
-                6. Does it suggest acquisition and growth strategies?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Yes. The platform generates channel recommendations, outreach ideas, content strategies, and growth initiatives, so you have a clear execution plan for acquiring and retaining customers.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-6">
+      <AccordionTrigger>
+        6. Does it cover restaurants and food spots?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Yes! The AI suggests top-rated restaurants, cafés, street food vendors, and local specialties based on your taste and budget.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-7">
-            <AccordionTrigger>
-                7. Can it track my GTM progress?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Yes. You can track execution milestones, measure results, and receive AI-driven optimization tips to adapt your GTM strategy as you go.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-7">
+      <AccordionTrigger>
+        7. Can I use it for any country?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Yes. Travel Guide Agent works globally — whether you&apos;re planning a weekend getaway nearby or an international vacation.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-8">
-            <AccordionTrigger>
-                8. Is Entrepreneur Copilot only for tech startups?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Not at all. It works for startups and businesses in any industry — from SaaS and e-commerce to manufacturing, services, and offline businesses — as long as you need a GTM plan.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
+    <AccordionItem value="item-8">
+      <AccordionTrigger>
+        8. Is it free to use?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Core features like itinerary generation and basic recommendations are free. Premium features — like advanced filters, exclusive travel tips, and priority updates — may require a paid subscription.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
 
-        <AccordionItem value="item-9">
-            <AccordionTrigger>
-                9. Is there a free version?
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                    Core features like idea analysis and basic GTM planning are free. Advanced features — such as detailed market reports, custom acquisition plans, and progress tracking — may require a paid subscription.
-                </p>
-            </AccordionContent>
-        </AccordionItem>
-    </Accordion>
+    <AccordionItem value="item-9">
+      <AccordionTrigger>
+        9. Can it suggest seasonal activities?
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-4 text-balance">
+        <p>
+          Yes! Travel Guide Agent takes into account the season and local events, so you get recommendations for the best time-specific activities and festivals.
+        </p>
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
 </section>
+
 
         </main>
     );

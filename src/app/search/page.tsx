@@ -1,158 +1,306 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import VantaFog from "@/components/VantaFog";
 import { RainbowButton } from "@/components/magicui/rainbow-button";
 import { AuroraText } from "@/components/magicui/aurora-text";
 
-interface GTMResult {
-  strategy_overview: string;
-  market_analysis: string;
-  customer_profiles: string[];
-  value_proposition: string;
-  acquisition_channels: string[];
-  outreach_plan: string;
-  growth_initiatives: string[];
-  optimization_tips: string;
+interface GuidePlace {
+    name: string;
+    location: string;
+    description: string;
+    tip: string;
 }
 
-export default function GTMStrategyPage() {
-  const [startupIdea, setStartupIdea] = useState<string>("");
-  const [targetMarket, setTargetMarket] = useState<string>("");
-  const [teamComposition, setTeamComposition] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<GTMResult | null>(null);
-  const [error, setError] = useState<string>("");
+interface GuideResponse {
+    guide_content: string | GuidePlace[]; // allow either raw text or parsed array
+    timestamp: string;
+}
 
-  const handleGenerate = async () => {
-    setLoading(true);
-    setError("");
-    setResult(null);
+interface ChatMessage {
+    role: "user" | "assistant";
+    content: string;
+}
+
+interface FavoritesResponse {
+    favorites: { City: string; "Favorite Place": string }[];
+    count: number;
+}
+
+const API_BASE = "https://personalized-guide-977121587860.asia-south2.run.app";
+
+export default function TravelGuidePage() {
+    const [city, setCity] = useState("");
+    const [guide, setGuide] = useState<GuideResponse | null>(null);
+    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+    const [chatInput, setChatInput] = useState("");
+    const [favorites, setFavorites] = useState<FavoritesResponse | null>(null);
+    const [loadingGuide, setLoadingGuide] = useState(false);
+    const [loadingChat, setLoadingChat] = useState(false);
+
+    // Load favorites on mount
+    useEffect(() => {
+        fetchFavorites();
+    }, []);
+
+    const fetchFavorites = async () => {
+        try {
+            const res = await axios.get<FavoritesResponse>(
+                `${API_BASE}/favorites`
+            );
+            setFavorites(res.data);
+        } catch (err) {
+            console.error("Failed to fetch favorites", err);
+        }
+    };
+
+    const handleGenerateGuide = async () => {
+        if (!city.trim()) return;
+        setLoadingGuide(true);
+        try {
+            const res = await axios.post<{
+                guide_content: string;
+                timestamp: string;
+            }>(`${API_BASE}/guide`, { city });
+
+            console.log(res);
+            
+
+            // Parse numbered list from Amelie into structured places
+            const raw = res.data.guide_content;
+            const placeRegex =
+                /\d+\.\s*(?:[\p{Emoji}\u200d]+)?\s*\*\*(.+?)\*\*\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*\*\*Pro Tip:\*\*\s*(.+?)(?=\d+\.|$)/gsu;
+
+            const places = [];
+            let match;
+            while ((match = placeRegex.exec(raw)) !== null) {
+                places.push({
+                    name: match[1].trim(),
+                    location: match[2].trim(),
+                    description: match[3].trim(),
+                    tip: match[4].trim(),
+                });
+            }
+
+            setGuide({
+                ...res.data,
+                guide_content: places, // store as array instead of raw text
+            });
+            setChatMessages([]);
+        } catch (err) {
+            console.error("Error fetching guide", err);
+        } finally {
+            setLoadingGuide(false);
+        }
+    };
+
+    const handleSendChat = async () => {
+    if (!chatInput.trim() || !city) return;
+
+    const newMessages: ChatMessage[] = [
+        ...chatMessages,
+        { role: "user", content: chatInput },
+    ];
+    setChatMessages(newMessages);
+    setChatInput("");
+    setLoadingChat(true);
 
     try {
-      const response = await axios.post<{ data: string }>(
-        "https://enterpreneaur-977121587860.asia-south2.run.app/run-crew",
-        {
-          startup_idea: startupIdea,
-          target_market: targetMarket,
-          team_composition: teamComposition,
-        }
-      );
-
-      console.log("API Response:", response.data);
-
-      const raw = response.data.data;
-      const jsonStart = raw.indexOf("```json");
-      const jsonEnd = raw.lastIndexOf("```");
-      const extracted =
-        jsonStart !== -1 && jsonEnd !== -1
-          ? raw.substring(jsonStart + 7, jsonEnd)
-          : raw;
-
-      const parsed: GTMResult = JSON.parse(extracted);
-      setResult(parsed);
+        const res = await axios.post(`${API_BASE}/chat`, {
+            messages: newMessages,
+            city_context: city,
+        });
+        setChatMessages([
+            ...newMessages,
+            { role: "assistant", content: res.data.response },
+        ]);
     } catch (err) {
-      console.error(err);
-      setError("Failed to generate GTM strategy. Please try again.");
+        console.error("Chat failed", err);
     } finally {
-      setLoading(false);
+        setLoadingChat(false);
     }
-  };
+};
 
-  return (
-    <div>
-      <VantaFog />
-      <div className="max-w-5xl mx-auto p-6 mt-10 space-y-6">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-primary">
-          Generate Your <AuroraText>Go-To-Market</AuroraText> Strategy
-        </h1>
-        <p className="text-gray-600">
-          Empower your startup with a tailored GTM plan in minutes. Just provide a few
-          details about your idea, target audience, and team.
-        </p>
 
-        {/* Input Fields */}
-        <div className="grid grid-cols-1 gap-4 mt-8">
-          <input
-            type="text"
-            value={startupIdea}
-            onChange={(e) => setStartupIdea(e.target.value)}
-            className="p-4 border rounded-md"
-            placeholder="Startup Idea (e.g., AI-powered resume enhancer)"
-          />
+    const handleSaveFavorite = async (placeName: string) => {
+        try {
+            const res = await axios.post(`${API_BASE}/favorites`, {
+                city,
+                place_name: placeName,
+            });
+            console.log(res.data.message);
+            fetchFavorites();
+        } catch (err) {
+            console.error("Save favorite failed", err);
+        }
+    };
 
-          <input
-            type="text"
-            value={targetMarket}
-            onChange={(e) => setTargetMarket(e.target.value)}
-            className="p-4 border rounded-md"
-            placeholder="Target Market (e.g., Recent graduates in tech)"
-          />
+    const handleClearFavorites = async () => {
+        try {
+            await axios.delete(`${API_BASE}/favorites`);
+            fetchFavorites();
+        } catch (err) {
+            console.error("Clear favorites failed", err);
+        }
+    };
 
-          <input
-            type="text"
-            value={teamComposition}
-            onChange={(e) => setTeamComposition(e.target.value)}
-            className="p-4 border rounded-md"
-            placeholder="Team Composition (e.g., 3 engineers, 1 career coach)"
-          />
-        </div>
+    return (
+        <div>
+            <VantaFog />
+            <div className="max-w-5xl mx-auto p-6 mt-10 space-y-6">
+                <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-primary">
+                    Your <AuroraText>Personalized Travel Guide</AuroraText>
+                </h1>
 
-        {/* Generate Button */}
-        <RainbowButton
-          variant="outline"
-          onClick={handleGenerate}
-          disabled={loading}
-        >
-          {loading ? "Generating..." : "Generate GTM Strategy"}
-        </RainbowButton>
+                {/* City Input */}
+                <div className="flex gap-2 mt-6">
+                    <input
+                        type="text"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="p-4 border rounded-md flex-1"
+                        placeholder="Enter city name (e.g., Paris)"
+                    />
+                </div>
+                <RainbowButton
+                    onClick={handleGenerateGuide}
+                    disabled={loadingGuide}
+                >
+                    {loadingGuide ? "Loading..." : "Get Guide"}
+                </RainbowButton>
 
-        {error && <p className="text-red-500 font-medium">{error}</p>}
+                {/* Guide Display */}
+                {guide && Array.isArray(guide.guide_content) && (
+                    <div className="space-y-4">
+                        <h2 className="text-xl font-semibold">
+                            🗺️ Guide for {city} ({guide.timestamp})
+                        </h2>
+                        {guide.guide_content.map((place, idx) => (
+                            <div
+                                key={idx}
+                                className="p-4 border rounded-lg bg-white shadow-sm space-y-2"
+                            >
+                                <h3 className="text-lg font-bold">
+                                    {idx + 1}. {place.name}
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                    {place.location}
+                                </p>
+                                <p>{place.description}</p>
+                                <p className="text-sm italic text-green-700">
+                                    💡 {place.tip}
+                                </p>
+                                <button
+                                    onClick={() =>
+                                        handleSaveFavorite(place.name)
+                                    }
+                                    className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
+                                >
+                                    ⭐ Save to Favorites
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
-        {/* Display Results */}
-        {result && (
-          <div className="mt-10 space-y-6">
-            <h2 className="text-2xl font-semibold">🚀 Your GTM Strategy</h2>
-            <div className="border p-4 rounded-md shadow-sm bg-white space-y-4">
-              <p><strong>Strategy Overview:</strong> {result.strategy_overview}</p>
-              <p><strong>Market Analysis:</strong> {result.market_analysis}</p>
-              <p><strong>Value Proposition:</strong> {result.value_proposition}</p>
+                {/* Chat UI */}
+                {guide && (
+                    <div className="mt-6 border p-4 rounded-md bg-white">
+                        <h3 className="text-lg font-semibold mb-2">
+                            💬 Chat with your AI guide
+                        </h3>
+                        <div className="space-y-2 max-h-64 overflow-y-auto border p-2 rounded">
+                            {chatMessages.map((msg, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`p-2 rounded ${
+                                        msg.role === "user"
+                                            ? "bg-blue-100 text-blue-900"
+                                            : "bg-gray-100 text-gray-900"
+                                    }`}
+                                >
+                                    <strong>
+                                        {msg.role === "user" ? "You" : "Amelie"}
+                                        :
+                                    </strong>{" "}
+                                    {msg.content}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex gap-2 my-2">
+                            <input
+                                type="text"
+                                value={chatInput}
+                                onChange={(e) => setChatInput(e.target.value)}
+                                className="p-2 border rounded flex-1"
+                                placeholder="Ask about a place..."
+                            />
+                        </div>
+                        <RainbowButton
+                            onClick={handleSendChat}
+                            disabled={loadingChat}
+                        >
+                            {loadingChat ? "..." : "Send"}
+                        </RainbowButton>
+                    </div>
+                )}
 
-              <div>
-                <strong>Customer Profiles:</strong>
-                <ul className="list-disc list-inside">
-                  {result.customer_profiles.map((profile, idx) => (
-                    <li key={idx}>{profile}</li>
-                  ))}
-                </ul>
-              </div>
+                {/* Favorites */}
+                <div className="mt-6 border p-4 rounded-md bg-white">
+                    <h3 className="text-lg font-semibold">⭐ Favorites</h3>
+                    {favorites?.favorites?.length ? (
+                        <ul className="list-disc list-inside">
+                            {favorites.favorites.map((fav, idx) => (
+                                <li key={idx}>
+                                    {fav.City} - {fav["Favorite Place"]}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No favorites saved.</p>
+                    )}
+                </div>
+                <RainbowButton
+                    variant="outline"
+                    onClick={handleClearFavorites}
+                    className="mt-2"
+                >
+                    Clear All
+                </RainbowButton>
 
-              <div>
-                <strong>Acquisition Channels:</strong>
-                <ul className="list-disc list-inside">
-                  {result.acquisition_channels.map((channel, idx) => (
-                    <li key={idx}>{channel}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <p><strong>Outreach Plan:</strong> {result.outreach_plan}</p>
-
-              <div>
-                <strong>Growth Initiatives:</strong>
-                <ul className="list-disc list-inside">
-                  {result.growth_initiatives.map((initiative, idx) => (
-                    <li key={idx}>{initiative}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <p><strong>Optimization Tips:</strong> {result.optimization_tips}</p>
+                {/* Save Favorite Input */}
+                {guide && (
+                    <div className="mt-4 flex gap-2">
+                        <input
+                            type="text"
+                            placeholder="Place to save (exact name)"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSaveFavorite(
+                                        (e.target as HTMLInputElement).value
+                                    );
+                                    (e.target as HTMLInputElement).value = "";
+                                }
+                            }}
+                            className="p-2 border rounded flex-1"
+                        />
+                <RainbowButton
+                    onClick={() => {
+                        const input = document.querySelector<HTMLInputElement>(
+                            "input[placeholder='Place to save (exact name)']"
+                        );
+                        if (input && input.value.trim()) {
+                            handleSaveFavorite(input.value.trim());
+                            input.value = "";
+                        }
+                    }}
+                >
+                    Save Favorite
+                </RainbowButton>
+                    </div>
+                )}
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
